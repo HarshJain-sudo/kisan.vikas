@@ -1,0 +1,69 @@
+/* HeroSection.css */
+.hero-section {
+    position: relative;
+    text-align: center;
+    color: white;
+    background: rgba(0,0,0,0.7); /* Example background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.8) 0%, rgba(33, 150, 243, 0.8) 100%);
+    z-index: 0;
+}
+
+.floating-elements .floating-element {
+    position: absolute;
+    animation-name: float;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.floating-element.leaf { animation-delay: 0s; }
+.floating-element.tractor { animation-delay: 8s; }
+.floating-element.wheat { animation-delay: 3s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-badge {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    padding: 8px 20px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.hero-buttons .btn {
+    padding: 15px 40px;
+    margin: 0 10px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #84fab0, #8fd3f4);
+}
+
+.btn-outline-light {
+    border: 2px solid white;
+    color: white;
+    background: transparent;
+}
+
+.btn-outline-light:hover {
+    background: white;
+    color: #2c3e50;
+}
