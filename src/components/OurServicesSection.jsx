@@ -40,7 +40,11 @@ function OurServicesSection() {
         const status = card.dataset.status;
         const route = card.dataset.route
         if (status === 'ready' && route) {
-          navigate(route);
+          if (route.startsWith('http://') || route.startsWith('https://')) {
+            window.location.href = route; // Directly modify the window location for absolute URLs
+          } else {
+              navigate(route); // Use navigate for relative routes
+          }
         }
         else if (status === 'coming-soon') {
           navigate('/coming-soon'); // Redirect to another page
@@ -67,7 +71,7 @@ function OurServicesSection() {
       <div className="row row-gap-4">
       {/* E Commerce */}
       <div className="col-md-4">
-        <div className="service-card card h-100" data-status="coming-soon" data-route="/agribazar">
+        <div className="service-card card h-100" data-status="ready" data-route="https://kisanvikas-agribazaar.vercel.app/">
           <div className="card-body text-center">
           <i className="service-icon fa-solid fa-cart-shopping" />
             <h3 className="card-title">AgriBazaar</h3>
