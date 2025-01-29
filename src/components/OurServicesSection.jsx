@@ -35,7 +35,13 @@ function OurServicesSection() {
     // Card Click Navigation
     cards.forEach((card) => {
       card.addEventListener('click', () => {
-        window.location.href = '/coming-soon'; // Redirect to another page
+        const status = card.dataset.status;
+        if (status === 'coming-soon') {
+          window.location.href = '/coming-soon'; // Redirect to another page
+        }
+        else if (status === 'ready') {
+          window.location.href = '/feature-soon'; // Redirect to another page
+        }
       });
     });
 
@@ -51,72 +57,95 @@ function OurServicesSection() {
   return (
     <div className="container my-5" id="services">
       <div className="services-header text-center">
-        <h2>Our Services</h2>
-        <p className="lead text-muted">Discover how we can help you grow</p>
+        <h2>Our Solutions for Farmers</h2>
+        <p className="lead text-muted">Empowering Farmers with Innovative Tools and Expert Support</p>
       </div>
       <div className="row row-gap-4">
+      {/* Community Building*/}
+      <div className="col-md-4">
+          <div className="service-card card h-100" data-status="coming-soon">
+            <div className="card-body text-center">
+            <i className="service-icon fa-solid fa-users-line" />
+              <h3 className="card-title">Farmer Connect</h3>
+              <p className="card-text">👥 Building a Stronger Community for Every Farmer</p>
+            </div>
+          </div>
+        </div>
+      
+      
+      {/* E Commerce */}
+      <div className="col-md-4">
+          <div className="service-card card h-100" data-status="coming-soon">
+            <div className="card-body text-center">
+            <i className="service-icon fa-solid fa-cart-shopping" />
+              <h3 className="card-title">AgriBazaar</h3>
+              <p className="card-text">🛒 Buy & Sell Everything Agriculture – From Seeds to Equipment</p>
+            </div>
+          </div>
+        </div>
+  
         {/* Crop Advisory */}
         <div className="col-md-4">
-          <div className="service-card card h-100">
+          <div className="service-card card h-100" data-status="coming-soon">
             <div className="card-body text-center">
               <i className="service-icon fas fa-seedling"></i>
               <h3 className="card-title">Crop Advisory</h3>
-              <p className="card-text">Get expert advice on crop selection and management</p>
+              <p className="card-text">🌱 Get expert advice on crop selection, disease prevention, and soil health for maximum yield.</p>
             </div>
           </div>
         </div>
 
         {/* Market Prices */}
         <div className="col-md-4">
-          <div className="service-card card h-100">
+          <div className="service-card card h-100" data-status="coming-soon">
             <div className="card-body text-center">
               <i className="service-icon fas fa-chart-line"></i>
               <h3 className="card-title">Market Prices</h3>
-              <p className="card-text">Real-time market prices and trends</p>
+              <p className="card-text">📊 Real-Time Market Trends and Crop Prices</p>
             </div>
           </div>
         </div>
 
         {/* Weather Updates */}
         <div className="col-md-4">
-          <div className="service-card card h-100">
+          <div className="service-card card h-100" data-status="coming-soon">
             <div className="card-body text-center">
               <i className="service-icon fas fa-cloud-sun"></i>
               <h3 className="card-title">Weather Updates</h3>
-              <p className="card-text">Accurate weather forecasts for better planning</p>
+              <p className="card-text">☁️ Weather Forecasts to Boost Your Farming Success</p>
             </div>
           </div>
         </div>
 
         {/* Equipment Rental */}
         <div className="col-md-4">
-          <div className="service-card card h-100">
+          <div className="service-card card h-100" data-status="coming-soon">
             <div className="card-body text-center">
               <i className="service-icon fas fa-tractor"></i>
-              <h3 className="card-title">Equipment Rental</h3>
-              <p className="card-text">Rent modern farming equipment</p>
+              <h3 className="card-title">FarmEquip Rentals</h3>
+              <p className="card-text">🚜 Rent Modern Equipment for a Smarter Farm</p>
             </div>
           </div>
         </div>
 
         {/* Training Programs */}
         <div className="col-md-4">
-          <div className="service-card card h-100">
+          <div className="service-card card h-100" data-status="coming-soon">
             <div className="card-body text-center">
               <i className="service-icon fas fa-chalkboard-teacher"></i>
-              <h3 className="card-title">Training Programs</h3>
-              <p className="card-text">Learn modern farming techniques</p>
+              <h3 className="card-title">AgriSkill Training</h3>
+              <p className="card-text">🎓  Learn cutting-edge farming skills and techniques to increase productivity and sustainability.</p>
             </div>
           </div>
         </div>
 
         {/* Support */}
         <div className="col-md-4">
-          <div className="service-card card h-100">
+          <div className="service-card card h-100" data-status="coming-soon">
             <div className="card-body text-center">
               <i className="service-icon fas fa-headset"></i>
-              <h3 className="card-title">24/7 Support</h3>
-              <p className="card-text">Get help whenever you need it</p>
+              <h3 className="card-title">24/7 Farmer Support</h3>
+              <p className="card-text">🛠️ Get the help you need, when you need it, with our expert support team always ready to assist you.</p>
             </div>
           </div>
         </div>

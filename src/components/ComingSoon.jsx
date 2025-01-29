@@ -7,6 +7,11 @@ const ComingSoon = () => {
   const [formError, setFormError] = useState("");
   const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
 
+  // State for animated stats
+  const [yieldImprovement, setYieldImprovement] = useState(0);
+  const [waterSaved, setWaterSaved] = useState(0);
+  const [farmersOnboard, setFarmersOnboard] = useState(0);
+
   useEffect(() => {
     const countdownDate = new Date().getTime() + 24 * 60 * 60 * 1000;
 
@@ -27,6 +32,27 @@ const ComingSoon = () => {
     }, 1000);
 
     return () => clearInterval(interval);
+  }, []);
+
+  // Effect to animate the counters
+  useEffect(() => {
+    const incrementCounter = (targetValue, setState) => {
+      let count = 0;
+      const increment = targetValue / 100; // Increment in small steps
+      const interval = setInterval(() => {
+        if (count < targetValue) {
+          count += increment;
+          setState(Math.floor(count));
+        } else {
+          clearInterval(interval);
+          setState(targetValue);
+        }
+      }, 10); // Delay between increments
+    };
+
+    incrementCounter(85, setYieldImprovement);
+    incrementCounter(40, setWaterSaved);
+    incrementCounter(1000, setFarmersOnboard);
   }, []);
 
   const handleInputChange = (e) => {
@@ -75,15 +101,15 @@ const ComingSoon = () => {
 
         <div className="coming-soon-stats-container">
           <div className="coming-soon-stat-item">
-            <div className="coming-soon-stat-number">85%</div>
+            <div className="coming-soon-stat-number">{yieldImprovement}%</div>
             <div>Yield Improvement</div>
           </div>
           <div className="coming-soon-stat-item">
-            <div className="coming-soon-stat-number">40%</div>
+            <div className="coming-soon-stat-number">{waterSaved}%</div>
             <div>Water Saved</div>
           </div>
           <div className="coming-soon-stat-item">
-            <div className="coming-soon-stat-number">1000+</div>
+            <div className="coming-soon-stat-number">{farmersOnboard}+</div>
             <div>Farmers Onboard</div>
           </div>
         </div>
