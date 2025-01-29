@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './OurServicesSection.css'; // Ensure CSS file exists for styles
 
 function OurServicesSection() {
+  const navigate = useNavigate();
   useEffect(() => {
     // Intersection Observer for Animations
     const observerOptions = {
@@ -36,12 +38,14 @@ function OurServicesSection() {
     cards.forEach((card) => {
       card.addEventListener('click', () => {
         const status = card.dataset.status;
-        if (status === 'coming-soon') {
-          window.location.href = '/coming-soon'; // Redirect to another page
+        const route = card.dataset.route
+        if (status === 'ready' && route) {
+          navigate(route);
         }
-        else if (status === 'ready') {
-          window.location.href = '/feature-soon'; // Redirect to another page
+        else if (status === 'coming-soon') {
+          navigate('/coming-soon'); // Redirect to another page
         }
+        
       });
     });
 
@@ -61,6 +65,17 @@ function OurServicesSection() {
         <p className="lead text-muted">Empowering Farmers with Innovative Tools and Expert Support</p>
       </div>
       <div className="row row-gap-4">
+      {/* E Commerce */}
+      <div className="col-md-4">
+        <div className="service-card card h-100" data-status="coming-soon" data-route="/agribazar">
+          <div className="card-body text-center">
+          <i className="service-icon fa-solid fa-cart-shopping" />
+            <h3 className="card-title">AgriBazaar</h3>
+            <p className="card-text">🛒 Buy & Sell Everything Agriculture – From Seeds to Equipment</p>
+          </div>
+        </div>
+      </div>
+  
       {/* Community Building*/}
       <div className="col-md-4">
           <div className="service-card card h-100" data-status="coming-soon">
@@ -72,18 +87,6 @@ function OurServicesSection() {
           </div>
         </div>
       
-      
-      {/* E Commerce */}
-      <div className="col-md-4">
-          <div className="service-card card h-100" data-status="coming-soon">
-            <div className="card-body text-center">
-            <i className="service-icon fa-solid fa-cart-shopping" />
-              <h3 className="card-title">AgriBazaar</h3>
-              <p className="card-text">🛒 Buy & Sell Everything Agriculture – From Seeds to Equipment</p>
-            </div>
-          </div>
-        </div>
-  
         {/* Crop Advisory */}
         <div className="col-md-4">
           <div className="service-card card h-100" data-status="coming-soon">
