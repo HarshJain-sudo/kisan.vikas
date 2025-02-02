@@ -31,7 +31,7 @@ function NewsletterSection() {
     };
 
     return (
-        <section className="newsletter-section">
+        <section className="newsletter-section" id="newsletter">
             <div className="container">
                 <div className="newsletter-wrapper">
                     <div className="newsletter-content">

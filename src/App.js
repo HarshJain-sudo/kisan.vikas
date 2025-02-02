@@ -3,6 +3,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import routes from "./routes/routes";
 import Loader from "./components/Loader";
+import { Analytics } from "@vercel/analytics/react"
 
 // Lazy load pages for better performance
 const Home = lazy(() => import("./pages/Home"));
@@ -26,6 +27,7 @@ function App() {
               <Route key={index} path={route.path} element={<route.component />} />
             ))}
           </Routes>
+          <Analytics />
         </Layout>
       </Suspense>
     </Router>

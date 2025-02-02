@@ -5,6 +5,7 @@ const ContactPage = lazy(() => import("../pages/ContactPage"));
 const AgriBazarRoutes = lazy(() => import("../products/AgriBazar/AgriBazarRoutes"));
 const Home = lazy(() => import("../pages/Home"));
 
+
 const routes = [
   { path: "/", component: Home },
   { path: "/coming-soon", component: ComingSoonPage },

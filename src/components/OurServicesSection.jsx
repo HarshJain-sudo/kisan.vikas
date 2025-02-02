@@ -79,6 +79,17 @@ function OurServicesSection() {
           </div>
         </div>
       </div>
+
+      {/* Crop Disease Detection */}
+      <div className="col-md-4">
+        <div className="service-card card h-100" data-status="ready" data-route="/crop-disease-detection">
+          <div className="card-body text-center">
+            <i className="service-icon fas fa-microscope" />
+            <h3 className="card-title">Crop Disease Detection</h3>
+            <p className="card-text">🔍 Upload crop images to identify diseases and get instant treatment recommendations</p>
+          </div>
+        </div>
+      </div>
   
       {/* Community Building*/}
       <div className="col-md-4">
@@ -92,7 +103,7 @@ function OurServicesSection() {
         </div>
       
         {/* Crop Advisory */}
-        <div className="col-md-4">
+        <div className="col-md-4">  
           <div className="service-card card h-100" data-status="coming-soon">
             <div className="card-body text-center">
               <i className="service-icon fas fa-seedling"></i>
