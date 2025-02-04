@@ -103,9 +103,9 @@ function FooterSection() {
               <i className="fa-solid fa-phone" aria-hidden="true"></i>
               <span>+91-7467885047</span>
             </a>
-            <a href="mailto:support@kisanvikas.in" title="Email our agricultural support team">
+            <a href="mailto: harshj60490@gmail.com" title="Email our agricultural support team">
               <i className="fa-solid fa-envelope" aria-hidden="true"></i>
-              <span>support@kisanvikas.in</span>
+              <span>harshj60490@gmail.com</span>
             </a>
           </ul>
         </address>

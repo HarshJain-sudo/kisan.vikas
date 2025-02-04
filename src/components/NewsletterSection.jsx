@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 import './NewsletterSection.css'; // Ensure to create a corresponding CSS file for styles
+
+// Initialize EmailJS with your public key
+emailjs.init("bPHmY4jvBITqMgCVW"); // Replace with your actual public key from EmailJS
 
 function NewsletterSection() {
     const [isSubscribed, setIsSubscribed] = useState(false);
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         // Floating Elements Animation
@@ -19,15 +26,41 @@ function NewsletterSection() {
         });
     }, []);
 
-    const handleSubscribe = (e) => {
+    const handleSubscribe = async (e) => {
         e.preventDefault();
-        // Simulate subscription success
-        setIsSubscribed(true);
+        setLoading(true);
+        setError('');
 
-        // Optionally, you can reset the form after some delay
-        setTimeout(() => {
-            setIsSubscribed(false);
-        }, 3000); // Reset after 3 seconds
+        // Prepare template parameters
+        const templateParams = {
+            to_name: "Admin",
+            from_name: email,
+            message: `New subscription from: ${email}`,
+            reply_to: email,
+        };
+
+        try {
+            await emailjs.send(
+                'service_xxxxxxx', // Replace with your Service ID
+                'template_xxxxxxx', // Replace with your Template ID
+                templateParams,
+                'YOUR_PUBLIC_KEY'  // Replace with your Public Key
+            );
+
+            setIsSubscribed(true);
+            setEmail('');
+            
+            // Reset subscription status after 3 seconds
+            setTimeout(() => {
+                setIsSubscribed(false);
+            }, 3000);
+
+        } catch (err) {
+            console.error('EmailJS Error:', err);
+            setError('Something went wrong. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -47,18 +80,32 @@ function NewsletterSection() {
                                             type="email"
                                             className="form-control"
                                             placeholder="Enter your email address"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             required
+                                            disabled={loading}
                                         />
-                                        <button type="submit" className="subscribe-btn">
-                                            Subscribe
-                                            <span className="btn-particles"></span>
+                                        <button 
+                                            type="submit" 
+                                            className={`subscribe-btn ${loading ? 'loading' : ''}`}
+                                            disabled={loading}
+                                        >
+                                            {loading ? (
+                                                <div className="spinner"></div>
+                                            ) : (
+                                                <>
+                                                    Subscribe
+                                                    <span className="btn-particles"></span>
+                                                </>
+                                            )}
                                         </button>
                                     </div>
+                                    {error && <div className="error-message">{error}</div>}
                                 </form>
                             ) : (
                                 <div className="success-message">
                                     <i className="fas fa-check-circle"></i>
-                                    <span>Subscription Successful!</span>
+                                    <span>Thank you for subscribing! Check your email for confirmation.</span>
                                 </div>
                             )}
 

@@ -1316,3 +1316,53 @@ footer {
         transform: translateY(0);
     }
 }
+
+/* Add these new styles */
+.error-message {
+    color: #ff4444;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.subscribe-btn.loading {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #ffffff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.success-message {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid #28a745;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #28a745;
+}
+
+.success-message i {
+    font-size: 1.2rem;
+}
+
+.input-group {
+    position: relative;
+}
+
+.form-control:disabled {
+    background: #f8f9fa;
+    cursor: not-allowed;
+}
