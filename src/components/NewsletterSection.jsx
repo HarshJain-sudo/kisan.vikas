@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import emailjs from '@emailjs/browser';
 import './NewsletterSection.css'; // Ensure to create a corresponding CSS file for styles
-
-// Initialize EmailJS with your public key
-emailjs.init("bPHmY4jvBITqMgCVW"); // Replace with your actual public key from EmailJS
 
 function NewsletterSection() {
     const [isSubscribed, setIsSubscribed] = useState(false);
-    const [email, setEmail] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        whatsappNumber: ''
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         // Floating Elements Animation
@@ -30,37 +30,51 @@ function NewsletterSection() {
         e.preventDefault();
         setLoading(true);
         setError('');
-
-        // Prepare template parameters
-        const templateParams = {
-            to_name: "Admin",
-            from_name: email,
-            message: `New subscription from: ${email}`,
-            reply_to: email,
-        };
+        setSuccessMessage('');
 
         try {
-            await emailjs.send(
-                'service_xxxxxxx', // Replace with your Service ID
-                'template_xxxxxxx', // Replace with your Template ID
-                templateParams,
-                'YOUR_PUBLIC_KEY'  // Replace with your Public Key
-            );
+            const response = await fetch('https://kv-backend-beta-vercel.vercel.app/api/newsletter_service/subscribe/v1/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    whatsapp_number: formData.whatsappNumber,
+                    name: formData.name
+                })
+            });
+
+            const data = await response.json();
+            console.log(data); // For debugging
+
+            if (!response.ok) {
+                throw new Error(data.response || 'Subscription failed');
+            }
 
             setIsSubscribed(true);
-            setEmail('');
+            setSuccessMessage(data.response || 'Subscription successful!');
+            setFormData({ name: '', whatsappNumber: '' });
             
             // Reset subscription status after 3 seconds
             setTimeout(() => {
                 setIsSubscribed(false);
+                setSuccessMessage('');
             }, 3000);
 
         } catch (err) {
-            console.error('EmailJS Error:', err);
-            setError('Something went wrong. Please try again later.');
+            console.error('API Error:', err);
+            setError(err.message || 'Something went wrong. Please try again later.');
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     return (
@@ -70,18 +84,30 @@ function NewsletterSection() {
                     <div className="newsletter-content">
                         <h2 className="animate-text">Stay Updated with KisanVikas</h2>
                         <p className="animate-text">
-                            Get the latest farming tips, market prices, and agricultural news directly in your inbox!
+                            Get the latest farming tips, market prices, and agricultural news directly on WhatsApp!
                         </p>
                         <div className="form-wrapper">
                             {!isSubscribed ? (
                                 <form className="newsletter-form" onSubmit={handleSubscribe}>
                                     <div className="input-group">
                                         <input
-                                            type="email"
+                                            type="text"
+                                            name="name"
                                             className="form-control"
-                                            placeholder="Enter your email address"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="Enter your name"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
+                                            required
+                                            disabled={loading}
+                                        />
+                                        <input
+                                            type="tel"
+                                            name="whatsappNumber"
+                                            pattern="[0-9]{10}"
+                                            className="form-control"
+                                            placeholder="Enter your WhatsApp number"
+                                            value={formData.whatsappNumber}
+                                            onChange={handleInputChange}
                                             required
                                             disabled={loading}
                                         />
@@ -105,7 +131,7 @@ function NewsletterSection() {
                             ) : (
                                 <div className="success-message">
                                     <i className="fas fa-check-circle"></i>
-                                    <span>Thank you for subscribing! Check your email for confirmation.</span>
+                                    <span>{successMessage}</span>
                                 </div>
                             )}
 
