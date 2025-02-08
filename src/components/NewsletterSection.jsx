@@ -31,7 +31,8 @@ function NewsletterSection() {
         setLoading(true);
         setError('');
         setSuccessMessage('');
-
+        // localhost_url = "http://127.0.0.1:8000/"
+        // vercel_url = "https://kv-backend-beta-vercel.vercel.app/"
         try {
             const response = await fetch('https://kv-backend-beta-vercel.vercel.app/api/newsletter_service/subscribe/v1/', {
                 method: 'POST',
