@@ -64,7 +64,15 @@ function OurServicesSection() {
               navigate(route);
             }
           } else if (status === 'coming-soon') {
-            navigate('/coming-soon');
+            // Show coming soon content before navigation
+            const cardBody = card.querySelector('.card-body');
+            if (cardBody) {
+              cardBody.classList.add('visible');
+              // Add a slight delay before navigation
+              setTimeout(() => {
+                navigate('/coming-soon');
+              }, 300);
+            }
           }
         });
       });
@@ -104,6 +112,11 @@ function OurServicesSection() {
                 <p className="card-text">
                   {service.emoji} {service.description}
                 </p>
+                {service.status === 'coming-soon' && (
+                  <div className="coming-soon-overlay">
+                    <p>Coming Soon!</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

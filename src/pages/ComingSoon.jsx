@@ -6,6 +6,7 @@ const ComingSoon = () => {
   const [formData, setFormData] = useState({ farmName: "", email: "", cropType: "" });
   const [formError, setFormError] = useState("");
   const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   // State for animated stats
   const [yieldImprovement, setYieldImprovement] = useState(0);
@@ -34,11 +35,19 @@ const ComingSoon = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Effect to animate the counters
+  // Add this effect to handle visibility
   useEffect(() => {
+    setIsVisible(true);
+    return () => setIsVisible(false);
+  }, []);
+
+  // Modify the animation effect to depend on isVisible
+  useEffect(() => {
+    if (!isVisible) return; // Only run when component is visible
+
     const incrementCounter = (targetValue, setState) => {
       let count = 0;
-      const increment = targetValue / 100; // Increment in small steps
+      const increment = targetValue / 100;
       const interval = setInterval(() => {
         if (count < targetValue) {
           count += increment;
@@ -47,13 +56,23 @@ const ComingSoon = () => {
           clearInterval(interval);
           setState(targetValue);
         }
-      }, 10); // Delay between increments
+      }, 10);
+
+      // Clean up interval on unmount
+      return () => clearInterval(interval);
     };
 
-    incrementCounter(85, setYieldImprovement);
-    incrementCounter(40, setWaterSaved);
-    incrementCounter(1000, setFarmersOnboard);
-  }, []);
+    const cleanup1 = incrementCounter(85, setYieldImprovement);
+    const cleanup2 = incrementCounter(40, setWaterSaved);
+    const cleanup3 = incrementCounter(1000, setFarmersOnboard);
+
+    // Clean up all intervals
+    return () => {
+      cleanup1();
+      cleanup2();
+      cleanup3();
+    };
+  }, [isVisible]); // Depend on isVisible state
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -95,7 +114,7 @@ const ComingSoon = () => {
 
   return (
     <div className="coming-soon">
-      <main className="fade-in">
+      <main className={`fade-in ${isVisible ? 'visible' : ''}`}>
         <h1>Smart Farming Solutions Coming Soon!</h1>
         <p>We're revolutionizing agriculture with AI-powered advisory services. Get ready for data-driven farming decisions!</p>
 
