@@ -1,127 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import lottie from 'lottie-web';
+import axios from 'axios';
 import './ExploreMarkets.css'; // Ensure this file contains styles for your component
 
 const SCHEMES_PER_PAGE = 6; // Number of schemes to show initially
 
-const ALL_SCHEMES = [
-  {
-    id: 1,
-    title: "PM-KISAN Scheme",
-    description: "Get direct income support of ₹6,000 per year in three equal installments. All small and marginal farmers with cultivable land are eligible.",
-    category: "financial",
-    link: "https://pmkisan.gov.in/",
-    images: [
-      "https://images.pexels.com/photos/2382904/pexels-photo-2382904.jpeg",
-      "https://images.pexels.com/photos/2165688/pexels-photo-2165688.jpeg"
-    ]
-  },
-  {
-    id: 2,
-    title: "Kisan Credit Card (KCC)",
-    description: "Access easy credit up to ₹3 lakh with minimal interest rate of 4%. Covers crop loans, term loans, and insurance against risks.",
-    category: "financial",
-    link: "https://www.nabard.org/content1.aspx?id=1720&catid=23&mid=23",
-    images: [
-      "https://images.pexels.com/photos/4386366/pexels-photo-4386366.jpeg",
-      "https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg"
-    ]
-  },
-  {
-    id: 3,
-    title: "PM Fasal Bima Yojana",
-    description: "Comprehensive crop insurance with just 1.5-2% premium. Get full coverage against natural calamities with quick claim settlement.",
-    category: "insurance",
-    link: "https://pmfby.gov.in/",
-    images: [
-      "https://images.pexels.com/photos/440731/pexels-photo-440731.jpeg",
-      "https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg"
-    ]
-  },
-  {
-    id: 4,
-    title: "eNAM (National Agriculture Market)",
-    description: "Sell your produce online across India for better prices. Free registration and direct payment to your bank account.",
-    category: "infrastructure",
-    link: "https://enam.gov.in/web/",
-    images: [
-      "https://images.pexels.com/photos/2284170/pexels-photo-2284170.jpeg",
-      "https://images.pexels.com/photos/1508666/pexels-photo-1508666.jpeg"
-    ]
-  },
-  {
-    id: 5,
-    title: "Soil Health Card Scheme",
-    description: "Get free soil testing and personalized nutrient recommendations every 2 years. Reduce fertilizer costs and improve yield.",
-    category: "infrastructure",
-    link: "https://www.soilhealth.dac.gov.in/",
-    images: [
-      "https://images.pexels.com/photos/1461441/pexels-photo-1461441.jpeg",
-      "https://images.pexels.com/photos/2132171/pexels-photo-2132171.jpeg"
-    ]
-  },
-  {
-    id: 6,
-    title: "PM Krishi Sinchai Yojana",
-    description: "Get up to 55% subsidy on micro-irrigation systems. Improve water efficiency with 'Per Drop More Crop' initiative.",
-    category: "infrastructure",
-    link: "https://pmksy.gov.in/",
-    images: [
-      "https://images.pexels.com/photos/2254030/pexels-photo-2254030.jpeg",
-      "https://images.pexels.com/photos/1483880/pexels-photo-1483880.jpeg"
-    ]
-  },
-  {
-    id: 7,
-    title: "PM Kisan Maan Dhan Yojana",
-    description: "Secure monthly pension of ₹3,000 after age 60. Small contribution of ₹55-200 per month based on age.",
-    category: "financial",
-    link: "https://pmkmy.gov.in/",
-    images: [
-      "https://images.pexels.com/photos/2886937/pexels-photo-2886937.jpeg",
-      "https://images.pexels.com/photos/2886938/pexels-photo-2886938.jpeg"
-    ]
-  },
-  {
-    id: 8,
-    title: "Agriculture Infrastructure Fund",
-    description: "Get loans up to ₹2 crore with 3% interest subvention. Build storage, processing units, and other agri-infrastructure.",
-    category: "infrastructure",
-    link: "https://agriinfra.dac.gov.in/",
-    images: [
-      "https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg",
-      "https://images.pexels.com/photos/2132171/pexels-photo-2132171.jpeg"
-    ]
-  },
-  {
-    id: 9,
-    title: "Livestock Insurance Scheme",
-    description: "Protect your cattle with 50% premium subsidy. Covers death of animals due to diseases, accidents & natural calamities.",
-    category: "insurance",
-    link: "https://dahd.nic.in/",
-    images: [
-      "https://images.pexels.com/photos/735968/pexels-photo-735968.jpeg",
-      "https://images.pexels.com/photos/162801/cows-dairy-cows-milk-dairy-farming-162801.jpeg"
-    ]
-  },
-  {
-    id: 10,
-    title: "Weather Based Crop Insurance",
-    description: "Get protection against adverse weather conditions. Automatic payouts based on weather parameters without claim filing.",
-    category: "insurance",
-    link: "https://pmfby.gov.in/",
-    images: [
-      "https://images.pexels.com/photos/1483880/pexels-photo-1483880.jpeg",
-      "https://images.pexels.com/photos/2254030/pexels-photo-2254030.jpeg"
-    ]
-  }
-];
-
 export default function ExploreMarkets() {
+  const [schemes, setSchemes] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [visibleSchemes, setVisibleSchemes] = useState(SCHEMES_PER_PAGE);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // Filter categories
   const FILTER_CATEGORIES = [
@@ -131,22 +21,41 @@ export default function ExploreMarkets() {
     { id: 'insurance', label: 'Insurance' }
   ];
 
-  // Filter schemes based on active category
-  const filteredSchemes = ALL_SCHEMES.filter(scheme => 
-    activeFilter === 'all' ? true : scheme.category === activeFilter
-  );
+  // Fetch schemes based on category
+  const fetchSchemes = async (category) => {
+    try {
+      setIsInitialLoading(true);
+      const baseUrl = 'https://kv-backend-beta-vercel.vercel.app/api/kv_services/schemes';
+      const url = category === 'all' 
+        ? `${baseUrl}/v1/`
+        : `${baseUrl}/${category}/v1/`;
+      
+      const response = await axios.get(url);
+      setSchemes(response.data.results);
+    } catch (error) {
+      console.error('Error fetching schemes:', error);
+    } finally {
+      setIsInitialLoading(false);
+    }
+  };
 
-  // Handle filter click
+  // Handle filter click with API integration
   const handleFilterClick = (categoryId) => {
     setActiveFilter(categoryId);
-    setVisibleSchemes(SCHEMES_PER_PAGE); // Reset visible schemes when filter changes
+    setVisibleSchemes(SCHEMES_PER_PAGE);
+    fetchSchemes(categoryId);
   };
+
+  // Initial fetch on component mount
+  useEffect(() => {
+    fetchSchemes('all');
+  }, []);
 
   const loadMoreSchemes = () => {
     setIsLoading(true);
     // Simulate loading delay
     setTimeout(() => {
-      setVisibleSchemes(prev => Math.min(prev + SCHEMES_PER_PAGE, filteredSchemes.length));
+      setVisibleSchemes(prev => Math.min(prev + SCHEMES_PER_PAGE, schemes.length));
       setIsLoading(false);
     }, 800);
   };
@@ -290,50 +199,56 @@ export default function ExploreMarkets() {
               </ul>
             </nav>
 
-            <div className="card-container" role="list">
-              {filteredSchemes.slice(0, visibleSchemes).map((scheme) => (
-                <article 
-                  key={scheme.id} 
-                  className="card" 
-                  role="listitem"
-                  itemScope 
-                  itemType="https://schema.org/GovernmentService"
-                >
-                  <a 
-                    href={scheme.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="card-link"
-                    itemProp="url"
+            {isInitialLoading ? (
+              <div className="loading-container">
+                <div className="loader" role="status" aria-label="Loading schemes..."></div>
+              </div>
+            ) : (
+              <div className="card-container" role="list">
+                {schemes.slice(0, visibleSchemes).map((scheme) => (
+                  <article 
+                    key={scheme.title} 
+                    className="card" 
+                    role="listitem"
+                    itemScope 
+                    itemType="https://schema.org/GovernmentService"
                   >
-                    <div className="card-image">
-                      <div className="slideshow-wrapper">
-                        {scheme.images.map((img, index) => (
-                          <img
-                            key={index}
-                            className="slideshow-img"
-                            src={img}
-                            alt={`${scheme.title} - Visual representation ${index + 1}`}
-                            loading={index === 0 ? "eager" : "lazy"}
-                            itemProp="image"
-                          />
-                        ))}
+                    <a 
+                      href={scheme.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="card-link"
+                      itemProp="url"
+                    >
+                      <div className="card-image">
+                        <div className="slideshow-wrapper">
+                          {scheme.images.map((img, index) => (
+                            <img
+                              key={index}
+                              className="slideshow-img"
+                              src={img.image}
+                              alt={img.alt_text}
+                              loading={index === 0 ? "eager" : "lazy"}
+                              itemProp="image"
+                            />
+                          ))}
+                        </div>
+                        <div className="card-overlay">
+                          <div className="card-icon"><span></span></div>
+                        </div>
                       </div>
-                      <div className="card-overlay">
-                        <div className="card-icon"><span></span></div>
+                      <div className="card-content">
+                        <h2 className="card-title" itemProp="name">{scheme.title}</h2>
+                        <p className="card-description" itemProp="description">{scheme.description}</p>
+                        <span className="learn-more">Learn More →</span>
                       </div>
-                    </div>
-                    <div className="card-content">
-                      <h2 className="card-title" itemProp="name">{scheme.title}</h2>
-                      <p className="card-description" itemProp="description">{scheme.description}</p>
-                      <span className="learn-more">Learn More →</span>
-                    </div>
-                  </a>
-                </article>
-              ))}
-            </div>
+                    </a>
+                  </article>
+                ))}
+              </div>
+            )}
 
-            {visibleSchemes < filteredSchemes.length && (
+            {visibleSchemes < schemes.length && (
               <div className="show-more-container">
                 <button 
                   className={`show-more-button ${isLoading ? 'loading' : ''}`}
@@ -346,8 +261,8 @@ export default function ExploreMarkets() {
                   ) : (
                     <>
                       Show More Schemes
-                      <span className="remaining-count" aria-label={`${filteredSchemes.length - visibleSchemes} schemes remaining`}>
-                        {filteredSchemes.length - visibleSchemes} more
+                      <span className="remaining-count" aria-label={`${schemes.length - visibleSchemes} schemes remaining`}>
+                        {schemes.length - visibleSchemes} more
                       </span>
                     </>
                   )}

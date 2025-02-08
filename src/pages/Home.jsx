@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
 import OurServicesSection from "../components/OurServicesSection";
 import ExploreMarkets from "../components/ExploreMarkets";
 import NewsletterSection from "../components/NewsletterSection";
 import FooterSection from "../components/FooterSection";
 import SEOMetaTags from '../components/SEOMetaTags';
+import axios from "axios";
 
 const Home = () => {
   const seoData = {
