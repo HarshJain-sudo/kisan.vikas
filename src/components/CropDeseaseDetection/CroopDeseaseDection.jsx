@@ -1031,11 +1031,14 @@ const CropDiseaseDetection = () => {
               animate={{
                 rotate: [0, 10, -10, 0],
                 scale: [1, 1.2, 1, 1],
+                opacity: 1
               }}
+              initial={{ opacity: 1 }}
               transition={{
                 duration: 4,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
+                opacity: { duration: 0 }
               }}
             >
               <FaLeaf className="leaf-icon" />
